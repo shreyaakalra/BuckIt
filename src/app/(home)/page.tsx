@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function Home() {
   return (
-   <div className="flex flex-col gap-y-4 p-4">
+   <div className="flex flex-col gap-y-4 p-4 w-dvw h-dvh">
     <div>
       <Button variant="elevated">
         I am a button
