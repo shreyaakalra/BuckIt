@@ -3,6 +3,9 @@ import { cn } from "@/lib/utils"
 import { Poppins } from "next/font/google"
 import Link from "next/link"
 
+import { usePathname } from "next/navigation"
+
+
 const poppins = Poppins({
     subsets: ["latin"],
     weight: ["700"]
@@ -46,6 +49,8 @@ const navbarItems = [
 ];
 
 export const Navbar = () => {
+    const pathname = usePathname()
+
     return(
         <nav className="h-20 flex border-b justify-between font-medium bg-white">
             <Link href="/" className="pl-6 flex items-center">
@@ -59,6 +64,7 @@ export const Navbar = () => {
                     <NavbarItem
                         key={item.href}
                         href={item.href} 
+                        isActive={pathname === item.href}
                     >
                         {item.children}
                     </NavbarItem>
