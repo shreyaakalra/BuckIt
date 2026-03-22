@@ -94,7 +94,7 @@ export const Navbar = () => {
           
         </Button>
       </div>
-      <div className="flex items-center lg:hidden pr-4">
+      <div className="flex items-center lg:hidden">
         <Button
             variant="ghost"
             className="size-12 border-transparent bg-white"
