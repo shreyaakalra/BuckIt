@@ -25,11 +25,9 @@ export const NavbarSidebar = ({
                 className="p-0 transition-none"
             >
                 <SheetHeader className="p-4 border-b">
-                    <div className="flex items-center">
-                        <SheetTitle>
-                            Menu
-                        </SheetTitle>
-                    </div>
+                    <SheetTitle>
+                        Menu
+                    </SheetTitle>
                 </SheetHeader>
                 <ScrollArea className="flex flex-col overflow-y-auto h-full pb-2">
                     {items.map((item) => (
@@ -37,10 +35,21 @@ export const NavbarSidebar = ({
                             key={item.href}
                             href={item.href}
                             className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium"
+                            onClick={() => onOpenChange(false)}
                         >
                             {item.children}
                         </Link>
                     ))}
+
+                    <div className="border-t"> 
+                        <Link href="/sign-in" className="w-full text-left p-4 bg-black text-white hover:bg-yellow-400 hover:text-white flex items-center text-base font-medium border-t border-white " onClick={() => onOpenChange(false)}>
+                            Log in
+                        </Link>
+                        <Link href="/sign-up" className="w-full text-left p-4 bg-black text-white hover:bg-yellow-400 hover:text-white flex items-center text-base font-medium border-t border-white" onClick={() => onOpenChange(false)}>
+                            Start selling
+                        </Link>
+
+                    </div>
 
                 </ScrollArea>
 
