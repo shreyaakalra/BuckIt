@@ -1,5 +1,8 @@
+
+
 import { Category } from "@/payload-types";
 import { Key } from "react";
+import { CategoryDropdown } from "./category-dropdown";
 
 interface Props{
     data: any;
@@ -11,16 +14,16 @@ export const Categories = ({
 }: Props) => {
     return(
         <div>
-            {data.map((category: Category) => {
+            {data.docs.map((category: Category) => (
                 <div key={category.id}>
                     <CategoryDropdown
-                        category={catgeory}
+                        category={category}
                         isActive={false}
                         isNavigationHovered={false}
                      />
                 </div>
 
-            })}
+            ))}
         </div>
     )
 }
