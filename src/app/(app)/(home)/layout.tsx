@@ -19,7 +19,7 @@ const Layout = async({ children }: Props) => {
     
       const data = await payload.find({
         collection: "categories",
-        depth: 1, // populate sub-categories
+        depth: 2, // populate sub-categories
         pagination: false,
         where: {
           parent: {
@@ -45,7 +45,7 @@ const Layout = async({ children }: Props) => {
     return(
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <SearchFilters data={data}/>
+            <SearchFilters data={formattedData}/>
             <div className="flex-1 bg-[#F4F4F0]">
                 {children}
             </div>
