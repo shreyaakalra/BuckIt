@@ -168,6 +168,7 @@ export interface Media {
  * via the `definition` "categories".
  */
 export interface Category {
+  subcategories: any;
   id: string;
   name: string;
   updatedAt: string;
