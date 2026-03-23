@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Category } from "@/payload-types"
 import { useRef, useState } from "react";
+import { useDropdownPosition } from "./use-dropdown-position";
 
 interface Props{
     category: Category;
@@ -20,6 +21,7 @@ export const CategoryDropdown = ({
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const { getDropdownPosition } = useDropdownPosition(dropdownRef);
     
     const onMouseEnter = () => {
         if(category.subcategories){
@@ -30,6 +32,8 @@ export const CategoryDropdown = ({
     const onMouseLeave = () => {
         setIsOpen(false);
     }
+
+    const dropdownPosition = getDropdownPosition();
 
     return(
         <div
@@ -51,11 +55,17 @@ export const CategoryDropdown = ({
                 {category.subcategories && category.subcategories.length>0 && (
                     <div 
                         className={cn(
-                            "opacity-0 absolute -bottom-3 w-0 h-0 border-l-[10px] border-r-[10px] border-l-transparent border-r-transparent border-b-black left-1/2 -translate-x-1/2",
+                            "opacity-0 absolute bottom-0 translate-y-full w-0 h-0 border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-black left-1/2 -translate-x-1/2",
+                            isOpen && "opacity-100"
                         )}
                     />
 
                 )}
+                <SubcategoryMenu 
+                    category={category}
+                    isOpen={isOpen}
+                    position={dropdownPosition}
+                />
             </div>
         </div>
     )
