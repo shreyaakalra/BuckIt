@@ -168,6 +168,7 @@ export interface Media {
  * via the `definition` "categories".
  */
 export interface Category {
+  [x: string]: string;
   slug: Key | null | undefined;
   subcategories: any;
   id: string;

@@ -4,6 +4,7 @@ import { Navbar } from "./navbar";
 import { SearchFilters } from "./search-filters";
 import configPromise from "@payload-config"
 import { getPayload } from 'payload'
+import { CustomCategory } from "./types";
 
 
 interface Props{
@@ -28,19 +29,13 @@ const Layout = async({ children }: Props) => {
         }
       })
 
-      const formattedData = data.docs.map((doc) => ({
+      const formattedData: CustomCategory[] = data.docs.map((doc) => ({
         ...doc,
         subcategories: (doc.subcategories?.docs ?? []).map((doc: Category) => ({
             ...(doc as Category),
             subcategories: undefined
         }))
       }) )
-
-      console.log({
-        data,
-        formattedData,
-      });
-
     
     return(
         <div className="flex flex-col min-h-screen">
