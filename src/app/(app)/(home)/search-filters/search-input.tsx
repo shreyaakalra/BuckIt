@@ -13,7 +13,7 @@ interface Props {
 };
 
 export const SearchInput = ({
-    disabled,
+    disabled,              
     data
 }: Props) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
