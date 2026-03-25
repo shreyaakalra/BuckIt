@@ -64,7 +64,6 @@ export const Categories = ({
             <CategoriesSidebar
             open={isSidebarOpen}
             onOpenChange={setIsSidebarOpen}
-            data={data}
             />
             <div 
                 ref={measureRef}
