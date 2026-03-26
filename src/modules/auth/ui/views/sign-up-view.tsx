@@ -3,12 +3,17 @@
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { registerSchema } from "../../schemas";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -17,7 +22,21 @@ const poppins = Poppins({
 
   
 export const SignUpView = () => {
+    const router = useRouter();
+    
+    const trpc = useTRPC();
+    const register = useMutation(trpc.auth.register.mutationOptions({
+        onError: (error) => {
+            toast.error(error.message);
+        },
+        onSuccess: () => {
+            router.push("/");
+        },
+    }))
+
+
     const form = useForm<z.infer<typeof registerSchema>>({
+        mode: "all",
         resolver: zodResolver(registerSchema),
         defaultValues: {
             email: "",
@@ -27,8 +46,13 @@ export const SignUpView = () => {
     });
 
     const onSubmit = (values: z.infer<typeof registerSchema>) => {
-        console.log(values);
+        register.mutate(values)
     }
+
+    const username = form.watch("username");
+    const usernameErrors = form.formState.errors.username;
+
+    const showPreview = username && !usernameErrors;
 
     return (
         <div className="grid grid-cold-1 lg:grid-cols-5">
@@ -55,6 +79,68 @@ export const SignUpView = () => {
                               </Link>  
                             </Button>
                         </div>
+                        <h1 className="text-4xl font-medium">
+                            Join over 1270 creators earning money on BuckIt.
+                        </h1>
+                        <FormField
+                            name="username"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel className="text-base">
+                                        Username
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field}/>
+                                    </FormControl>
+                                    <FormDescription
+                                        className={cn("hidden", showPreview && "block")}
+                                    >
+                                        Your store will be available at&nbsp;
+                                        <strong>{username}</strong>
+                                    </FormDescription>
+                                    <FormMessage />
+                                    
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="email"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel className="text-base">
+                                        Email
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field}/>
+                                    </FormControl>
+                                    <FormMessage />
+                                    
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="password"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel className="text-base">
+                                        Password
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} type="password"/>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button
+                        disabled={register.isPending}
+                            type="submit"
+                            size="lg"
+                            variant="elevated"
+                            className="bg-black text-white hover:bg-yellow-400 hover:text-primary"
+                        >
+                           Create Account 
+                        </Button>
 
                     </form>
                     
