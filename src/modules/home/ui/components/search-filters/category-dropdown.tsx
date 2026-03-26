@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
-import { useDropdownPosition } from "./use-dropdown-position";
-import { SubcategoryMenu } from "./subcategory-menu";
+
 import Link from "next/link";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
+import { SubcategoryMenu } from "@/modules/home/ui/components/search-filters/subcategory-menu";
+import { useDropdownPosition } from "@/modules/home/ui/components/search-filters/use-dropdown-position";
 
 interface Props{
     category: CategoriesGetManyOutput[1];
