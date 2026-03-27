@@ -1,5 +1,4 @@
 import { Suspense } from "react"
-
 import { ProductSort } from "../components/product-sort"
 import { ProductFilters } from "../components/product-filters"
 import { ProductList, ProductListSkeleton } from "../components/product-list"
@@ -9,6 +8,8 @@ interface Props {
   tenantSlug?: string;
   narrowView?: boolean;
 };
+
+
 
 export const ProductListView = ({ category, tenantSlug, narrowView }: Props) => {
   return (
