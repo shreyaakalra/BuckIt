@@ -2,9 +2,10 @@ import type { Stripe } from "stripe";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
-import { ExpandedLineItem } from "@/modules/checkout/types";
 
+import { stripe } from "@/lib/stripe";
+
+import { ExpandedLineItem } from "@/modules/checkout/types";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -22,14 +23,18 @@ export async function POST(req: Request) {
       console.log(error);
     }
 
+    console.log(`❌ Error message: ${errorMessage}`);
     return NextResponse.json(
       { message: `Webhook Error: ${errorMessage}` },
       { status: 400 }
     )
   }
 
+  console.log("✅ Success:", event.id);
+
   const permittedEvents: string[] = [
     "checkout.session.completed",
+    "account.updated"
   ];
 
   const payload = await getPayload({ config });
@@ -60,6 +65,9 @@ export async function POST(req: Request) {
             {
               expand: ["line_items.data.price.product"],
             },
+            {
+              stripeAccount: event.account,
+            },
           );
 
           if (
@@ -76,6 +84,7 @@ export async function POST(req: Request) {
               collection: "orders",
               data: {
                 stripeCheckoutSessionId: data.id,
+                stripeAccountId: event.account,
                 user: user.id,
                 product: item.price.product.metadata.id,
                 name: item.price.product.name,
@@ -83,10 +92,26 @@ export async function POST(req: Request) {
             });
           }
           break;
+        case "account.updated":
+          data = event.data.object as Stripe.Account;
+
+          await payload.update({
+            collection: "tenants",
+            where: {
+              stripeAccountId: {
+                equals: data.id,
+              },
+            },
+            data: {
+              stripeDetailsSubmitted: data.details_submitted,
+            },
+          });
+
+        break;
         default:
           throw new Error(`Unhandled event: ${event.type}`);
       }
-      } catch (error) {
+    } catch (error) {
       console.log(error)
       return NextResponse.json(
         { message: "Webhook handler failed" },
