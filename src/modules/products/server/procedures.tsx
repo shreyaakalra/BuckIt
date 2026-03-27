@@ -1,5 +1,7 @@
 import z from "zod";
 import type { Sort, Where } from "payload";
+import { headers as getHeaders } from "next/headers";
+
 import { Category, Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 
@@ -7,7 +9,6 @@ import { sortValues } from "../search-params";
 import { DEFAULT_LIMIT } from "@/modules/home/constants";
 
 export const productsRouter = createTRPCRouter({
-
   getOne: baseProcedure
     .input(
       z.object({
@@ -15,19 +16,48 @@ export const productsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      const headers = await getHeaders();
+      const session = await ctx.payload.auth({ headers });
+
       const product = await ctx.payload.findByID({
         collection: "products",
         id: input.id,
         depth: 2, // Load the "product.image", "product.tenant", and "product.tenant.image"
       });
 
+      let isPurchased = false;
+
+      if (session.user) {
+        const ordersData = await ctx.payload.find({
+          collection: "orders",
+          pagination: false,
+          limit: 1,
+          where: {
+            and: [
+              {
+                product: {
+                  equals: input.id,
+                },
+              },
+              {
+                user: {
+                  equals: session.user.id,
+                },
+              },
+            ],
+          },
+        });
+
+        isPurchased = !!ordersData.docs[0];
+      }
+
       return {
         ...product,
+        isPurchased,
         image: product.image as Media | null,
         tenant: product.tenant as Tenant & { image: Media | null },
       }
     }),
-
   getMany: baseProcedure
     .input(
       z.object({
@@ -122,7 +152,7 @@ export const productsRouter = createTRPCRouter({
 
       const data = await ctx.payload.find({
         collection: "products",
-        depth: 2, // Populate "category", "image", "tenant" & "tenant.image"
+        depth: 2,
         where,
         sort,
         page: input.cursor,
