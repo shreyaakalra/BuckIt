@@ -71,7 +71,7 @@ export const reviewsRouter = createTRPCRouter({
           });
         }
 
-        const existingReviewsData = await ctx.db.find({
+        const existingReviewsData = await ctx.payload.find({
           collection: "reviews",
           where: {
             and: [
