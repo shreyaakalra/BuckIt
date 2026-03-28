@@ -12,9 +12,9 @@ export const ProductList = () => {
   const { 
     data, 
     hasNextPage, 
-    isFetchingNextPage, 
+    isFetchigitngNextPage, 
     fetchNextPage
-  } = useSuspenseInfiniteQuery(trpc.library.getMany.infiniteQueryOptions(
+  } = useSuspenseInfiniteQuery(trpc.products.getMany.infiniteQueryOptions(
     {
       limit: DEFAULT_LIMIT,
     },

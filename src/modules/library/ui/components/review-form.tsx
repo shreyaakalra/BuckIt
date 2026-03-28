@@ -16,9 +16,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+
 import { ReviewsGetOneOutput } from "@/modules/reviews/types";
-
-
 
 interface Props {
   productId: string;
@@ -134,8 +133,7 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
             {initialData ? "Update review" : "Post review"}
           </Button>
         )}
-
-        </form>
+      </form>
       {isPreview && (
         <Button
           onClick={() => setIsPreview(false)}
@@ -148,5 +146,28 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
         </Button>
       )}
     </Form>
+  );
+};
+
+export const ReviewFormSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-y-4">
+      <p className="font-medium">
+        Liked it? Give it a rating
+      </p>
+      <StarPicker disabled />
+      <Textarea
+        placeholder="Want to leave a written review?"
+        disabled
+      />
+      <Button
+        variant="elevated"
+        disabled
+        size="lg"
+        className="bg-black text-white hover:bg-pink-400 hover:text-primary w-fit"
+      >
+        Post review
+      </Button>
+    </div>
   );
 };

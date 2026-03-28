@@ -1,14 +1,12 @@
 import z from "zod";
 import type Stripe from "stripe";
-
 import { TRPCError } from "@trpc/server";
-
 import { stripe } from "@/lib/stripe";
 import { Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init";
-
 import { CheckoutMetadata, ProductMetadata } from "../types";
 import { PLATFORM_FEE_PERCENTAGE } from "@/modules/home/constants";
+
 
 export const checkoutRouter = createTRPCRouter({
   verify: protectedProcedure
@@ -77,9 +75,14 @@ export const checkoutRouter = createTRPCRouter({
               "tenant.slug": {
                 equals: input.tenantSlug
               }
-            }
-          ]
-        }
+            },
+            {
+              isArchived: {
+                equals: false,
+              },
+            },
+          ],
+        },
       })
 
       if (products.totalDocs !== input.productIds.length) {
@@ -179,6 +182,18 @@ export const checkoutRouter = createTRPCRouter({
           id: {
             in: input.ids,
           },
+          and: [
+            {
+              id: {
+                in: input.ids,
+              },
+            },
+            {
+              isArchived: {
+                equals: false,
+              },
+            },
+          ],
         },
       });
 
