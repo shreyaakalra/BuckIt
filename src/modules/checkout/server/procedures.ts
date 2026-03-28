@@ -1,6 +1,8 @@
 import z from "zod";
 import type Stripe from "stripe";
+
 import { TRPCError } from "@trpc/server";
+
 import { stripe } from "@/lib/stripe";
 import { Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init";
@@ -78,11 +80,11 @@ export const checkoutRouter = createTRPCRouter({
             },
             {
               isArchived: {
-                equals: false,
+                not_equals: true,
               },
-            },
-          ],
-        },
+            }
+          ]
+        }
       })
 
       if (products.totalDocs !== input.productIds.length) {
@@ -179,9 +181,6 @@ export const checkoutRouter = createTRPCRouter({
         collection: "products",
         depth: 2, // Populate "category", "image", "tenant" & "tenant.image"
         where: {
-          id: {
-            in: input.ids,
-          },
           and: [
             {
               id: {
@@ -190,7 +189,7 @@ export const checkoutRouter = createTRPCRouter({
             },
             {
               isArchived: {
-                equals: false,
+                not_equals: true,
               },
             },
           ],
