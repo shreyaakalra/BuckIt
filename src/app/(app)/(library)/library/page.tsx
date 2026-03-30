@@ -3,6 +3,8 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { DEFAULT_LIMIT } from "@/modules/home/constants";
 import { LibraryView } from "@/modules/library/ui/views/library-view";
 
+export const dynamic = "force-dynamic";
+
 const Page = async () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchInfiniteQuery(trpc.library.getMany.infiniteQueryOptions({

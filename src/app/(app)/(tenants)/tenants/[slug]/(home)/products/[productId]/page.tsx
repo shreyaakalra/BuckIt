@@ -3,6 +3,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { ProductView, ProductViewSkeleton } from "@/modules/products/ui/views/product-view";
 
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ productId: string; slug: string }>;

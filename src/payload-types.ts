@@ -512,7 +512,7 @@ export interface ProductsSelect<T extends boolean = true> {
   content?: T;
   isPrivate?: T;
   isArchived?: T;
-  updatedAt?: T; 
+  updatedAt?: T;
   createdAt?: T;
 }
 /**

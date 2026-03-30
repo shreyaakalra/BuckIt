@@ -48,12 +48,17 @@ export const authRouter = createTRPCRouter({
 
       const tenant = await ctx.payload.create({
         collection: "tenants",
+        overrideAccess: true,
         data: {
           name: input.username,
-          slug: input.username,
+          slug: input.username
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, ''),
           stripeAccountId: account.id,
         }
-      })
+      });
 
       await ctx.payload.create({
         collection: "users",
