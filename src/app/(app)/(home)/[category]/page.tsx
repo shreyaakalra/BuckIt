@@ -3,8 +3,6 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { loadProductFilters } from "@/modules/products/search-params";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
-import { DEFAULT_LIMIT } from "@/modules/home/constants";
-
 
 interface Props {
   params: Promise<{
@@ -13,17 +11,14 @@ interface Props {
   searchParams: Promise<SearchParams>;
 };
 
-export const dynamic = "force-dynamic";
-
 const Page = async ({ params, searchParams }: Props) => {
   const { category } = await params;
   const filters = await loadProductFilters(searchParams);
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(trpc.products.getMany.infiniteQueryOptions({
-    ...filters,
+  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({
     category,
-    limit: DEFAULT_LIMIT,
+    ...filters,
   }));
 
   return ( 
