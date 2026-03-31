@@ -9,10 +9,8 @@ import { Button } from "@/components/ui/button";
 
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
-
-import { CategoriesSidebar } from "./categories-sidebar";
 import { CategoryDropdown } from "./category-dropdown";
-
+import { CategoriesSidebar } from "./categories-sidebar";
 
 interface Props {
   data: CategoriesGetManyOutput
@@ -93,6 +91,8 @@ export const Categories = ({ data }: Props) => {
         onMouseEnter={() => setIsAnyHovered(true)}
         onMouseLeave={() => setIsAnyHovered(false)}
       >
+        {/* TODO: Hardcode "All" button */}
+
         {data.slice(0, visibleCount).map((category) => (
           <div key={category.id}>
             <CategoryDropdown

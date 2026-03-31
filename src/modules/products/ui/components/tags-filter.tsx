@@ -2,8 +2,8 @@ import { LoaderIcon } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
+import { DEFAULT_LIMIT } from "@/constants";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DEFAULT_LIMIT } from "@/modules/home/constants";
 
 interface TagsFilterProps {
   value?: string[] | null;

@@ -1,7 +1,9 @@
-export default function Pricing(){
-    return(
-        <div>
-            THIS IS THE PRICING PAGE
-        </div>
-    )
+const Page = () => {
+  return (
+    <div>
+      Pricing page
+    </div>
+  );
 }
+
+export default Page;

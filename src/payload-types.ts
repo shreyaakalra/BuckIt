@@ -270,11 +270,11 @@ export interface Product {
     [k: string]: unknown;
   } | null;
   /**
-   * If checked, the product will only be shown in your store
+   * If checked, this product will not be shown on the public storefront
    */
   isPrivate?: boolean | null;
   /**
-   * If checked, the product will no longer be shown
+   * If checked, this product will be archived
    */
   isArchived?: boolean | null;
   updatedAt: string;

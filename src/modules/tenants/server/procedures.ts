@@ -12,7 +12,7 @@ export const tenantsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const tenantsData = await ctx.payload.find({
+      const tenantsData = await ctx.db.find({
         collection: "tenants",
         depth: 1, // "tenant.image" is a type of "Media"
         where: {

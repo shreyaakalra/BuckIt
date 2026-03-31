@@ -17,5 +17,4 @@ export type ExpandedLineItem = Stripe.LineItem & {
       metadata: ProductMetadata,
     };
   };
-
 };

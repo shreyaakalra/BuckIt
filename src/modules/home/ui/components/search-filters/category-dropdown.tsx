@@ -33,7 +33,6 @@ export const CategoryDropdown = ({
 
   const onMouseLeave = () => setIsOpen(false);
 
-
   // TODO: Potentially improve mobile
   // const toggleDropdown = () => {
   //   if (category.subcategories?.docs?.length) {

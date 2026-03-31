@@ -2,12 +2,12 @@
 
 import { InboxIcon } from "lucide-react";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
 
+import { useTRPC } from "@/trpc/client";
+import { DEFAULT_LIMIT } from "@/constants";
 import { Button } from "@/components/ui/button";
 
 import { ProductCard, ProductCardSkeleton } from "./product-card";
-import { DEFAULT_LIMIT } from "@/modules/home/constants";
 
 export const ProductList = () => {
   const trpc = useTRPC();
@@ -53,7 +53,6 @@ export const ProductList = () => {
           />
         ))}
       </div>
-
       <div className="flex justify-center pt-8">
         {hasNextPage && (
           <Button

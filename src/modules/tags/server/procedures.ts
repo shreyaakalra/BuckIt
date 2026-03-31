@@ -1,6 +1,7 @@
 import z from "zod";
+
+import { DEFAULT_LIMIT } from "@/constants";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-import { DEFAULT_LIMIT } from "@/modules/home/constants";
 
 export const tagsRouter = createTRPCRouter({
   getMany: baseProcedure
@@ -11,7 +12,7 @@ export const tagsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const data = await ctx.payload.find({
+      const data = await ctx.db.find({
         collection: "tags",
         page: input.cursor,
         limit: input.limit,

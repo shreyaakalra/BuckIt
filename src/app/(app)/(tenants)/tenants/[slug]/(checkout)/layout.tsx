@@ -16,7 +16,7 @@ const Layout = async ({ children, params }: LayoutProps) => {
         <div className="max-w-(--breakpoint-xl) mx-auto">
           {children}
         </div>
-        </div>
+      </div>
       <Footer />
     </div>
   );

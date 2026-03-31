@@ -11,14 +11,14 @@ export const authRouter = createTRPCRouter({
   session: baseProcedure.query(async ({ ctx }) => {
     const headers = await getHeaders();
 
-    const session = await ctx.payload.auth({ headers });
+    const session = await ctx.db.auth({ headers });
 
     return session;
   }),
   register: baseProcedure
     .input(registerSchema)
     .mutation(async ({ input, ctx }) => {
-      const existingData = await ctx.payload.find({
+      const existingData = await ctx.db.find({
         collection: "users",
         limit: 1,
         where: {
@@ -46,21 +46,16 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const tenant = await ctx.payload.create({
+      const tenant = await ctx.db.create({
         collection: "tenants",
-        overrideAccess: true,
         data: {
           name: input.username,
-          slug: input.username
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, ''),
+          slug: input.username,
           stripeAccountId: account.id,
         }
-      });
+      })
 
-      await ctx.payload.create({
+      await ctx.db.create({
         collection: "users",
         data: {
           email: input.email,
@@ -74,7 +69,7 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      const data = await ctx.payload.login({
+      const data = await ctx.db.login({
         collection: "users",
         data: {
           email: input.email,
@@ -90,14 +85,14 @@ export const authRouter = createTRPCRouter({
       }
 
       await generateAuthCookie({
-        prefix: ctx.payload.config.cookiePrefix,
+        prefix: ctx.db.config.cookiePrefix,
         value: data.token,
       });
     }),
     login: baseProcedure
     .input(loginSchema)
     .mutation(async ({ input, ctx }) => {
-      const data = await ctx.payload.login({
+      const data = await ctx.db.login({
         collection: "users",
         data: {
           email: input.email,
@@ -113,7 +108,7 @@ export const authRouter = createTRPCRouter({
       }
 
       await generateAuthCookie({
-        prefix: ctx.payload.config.cookiePrefix,
+        prefix: ctx.db.config.cookiePrefix,
         value: data.token,
       });
 

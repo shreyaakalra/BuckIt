@@ -11,7 +11,7 @@ export const reviewsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const product = await ctx.payload.findByID({
+      const product = await ctx.db.findByID({
         collection: "products",
         id: input.productId,
       });
@@ -23,7 +23,7 @@ export const reviewsRouter = createTRPCRouter({
         });
       }
 
-      const reviewsData = await ctx.payload.find({
+      const reviewsData = await ctx.db.find({
         collection: "reviews",
         limit: 1,
         where: {
@@ -59,7 +59,7 @@ export const reviewsRouter = createTRPCRouter({
         })
       )
       .mutation(async ({ input, ctx }) => {
-        const product = await ctx.payload.findByID({
+        const product = await ctx.db.findByID({
           collection: "products",
           id: input.productId,
         });
@@ -71,7 +71,7 @@ export const reviewsRouter = createTRPCRouter({
           });
         }
 
-        const existingReviewsData = await ctx.payload.find({
+        const existingReviewsData = await ctx.db.find({
           collection: "reviews",
           where: {
             and: [
@@ -92,7 +92,7 @@ export const reviewsRouter = createTRPCRouter({
           });
         }
 
-        const review = await ctx.payload.create({
+        const review = await ctx.db.create({
           collection: "reviews",
           data: {
             user: ctx.session.user.id,
@@ -113,7 +113,7 @@ export const reviewsRouter = createTRPCRouter({
         })
       )
       .mutation(async ({ input, ctx }) => {
-        const existingReview = await ctx.payload.findByID({
+        const existingReview = await ctx.db.findByID({
           depth: 0, // exitingReview.user will be the user ID
           collection: "reviews",
           id: input.reviewId,
@@ -133,7 +133,7 @@ export const reviewsRouter = createTRPCRouter({
           });
         }
 
-        const updatedReview = await ctx.payload.update({
+        const updatedReview = await ctx.db.update({
           collection: "reviews",
           id: input.reviewId,
           data: {

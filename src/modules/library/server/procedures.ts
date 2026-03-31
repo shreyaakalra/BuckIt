@@ -1,8 +1,9 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
+
+import { DEFAULT_LIMIT } from "@/constants";
 import { Media, Tenant } from "@/payload-types";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { DEFAULT_LIMIT } from "@/modules/home/constants";
 
 export const libraryRouter = createTRPCRouter({
   getOne: protectedProcedure
@@ -12,7 +13,7 @@ export const libraryRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const ordersData = await ctx.payload.find({
+      const ordersData = await ctx.db.find({
         collection: "orders",
         limit: 1,
         pagination: false,
@@ -41,7 +42,7 @@ export const libraryRouter = createTRPCRouter({
         });
       }
 
-      const product = await ctx.payload.findByID({
+      const product = await ctx.db.findByID({
         collection: "products",
         id: input.productId,
       });
@@ -63,7 +64,7 @@ export const libraryRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const ordersData = await ctx.payload.find({
+      const ordersData = await ctx.db.find({
         collection: "orders",
         depth: 0, // We want to just get ids, without populating
         page: input.cursor,
@@ -77,7 +78,7 @@ export const libraryRouter = createTRPCRouter({
 
       const productIds = ordersData.docs.map((order) => order.product);
 
-      const productsData = await ctx.payload.find({
+      const productsData = await ctx.db.find({
         collection: "products",
         pagination: false,
         where: {
@@ -89,7 +90,7 @@ export const libraryRouter = createTRPCRouter({
 
       const dataWithSummarizedReviews = await Promise.all(
         productsData.docs.map(async (doc) => {
-          const reviewsData = await ctx.payload.find({
+          const reviewsData = await ctx.db.find({
             collection: "reviews",
             pagination: false,
             where: {

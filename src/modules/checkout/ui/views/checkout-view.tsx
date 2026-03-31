@@ -22,7 +22,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
   const router = useRouter();
   const [states, setStates] = useCheckoutStates();
   const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
-
+  
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data, error, isLoading } = useQuery(trpc.checkout.getProducts.queryOptions({
@@ -61,7 +61,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
     queryClient,
     trpc.library.getMany,
   ]);
-
+  
   useEffect(() => {
     if (error?.data?.code === "NOT_FOUND") {
       clearCart();

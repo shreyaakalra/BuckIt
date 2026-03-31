@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-
 import { getQueryClient, trpc } from "@/trpc/server";
 
 import { Navbar } from "@/modules/home/ui/components/navbar";
@@ -11,7 +10,6 @@ import { SearchFilters, SearchFiltersSkeleton } from "@/modules/home/ui/componen
 interface Props {
   children: React.ReactNode;
 };
-
 
 const Layout = async ({ children }: Props) => {
   const queryClient = getQueryClient();
@@ -34,5 +32,5 @@ const Layout = async ({ children }: Props) => {
     </div>
   );
 }
-
+ 
 export default Layout;

@@ -55,7 +55,7 @@ export const ProductCard = ({
               </p>
             </div>
           )}
-          </div>
+        </div>
       </div>
     </Link>
   )

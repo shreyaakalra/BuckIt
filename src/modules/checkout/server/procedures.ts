@@ -1,17 +1,20 @@
 import z from "zod";
 import type Stripe from "stripe";
+
 import { TRPCError } from "@trpc/server";
+
 import { stripe } from "@/lib/stripe";
 import { Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init";
+
 import { CheckoutMetadata, ProductMetadata } from "../types";
+import { PLATFORM_FEE_PERCENTAGE } from "@/constants";
 import { generateTenantURL } from "@/lib/utils";
-import { PLATFORM_FEE_PERCENTAGE } from "@/modules/home/constants";
 
 export const checkoutRouter = createTRPCRouter({
   verify: protectedProcedure
     .mutation(async ({ ctx }) => {
-      const user = await ctx.payload.findByID({
+      const user = await ctx.db.findByID({
         collection: "users",
         id: ctx.session.user.id,
         depth: 0, // user.tenants[0].tenant is going to be a string (tenant ID)
@@ -25,7 +28,7 @@ export const checkoutRouter = createTRPCRouter({
       }
 
       const tenantId = user.tenants?.[0]?.tenant as string; // This is an id because of depth: 0
-      const tenant = await ctx.payload.findByID({
+      const tenant = await ctx.db.findByID({
         collection: "tenants",
         id: tenantId,
       });
@@ -61,7 +64,7 @@ export const checkoutRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const products = await ctx.payload.find({
+      const products = await ctx.db.find({
         collection: "products",
         depth: 2,
         where: {
@@ -89,7 +92,7 @@ export const checkoutRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Products not found" });
       }
 
-      const tenantsData = await ctx.payload.find({
+      const tenantsData = await ctx.db.find({
         collection: "tenants",
         limit: 1,
         pagination: false,
@@ -177,7 +180,7 @@ export const checkoutRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const data = await ctx.payload.find({
+      const data = await ctx.db.find({
         collection: "products",
         depth: 2, // Populate "category", "image", "tenant" & "tenant.image"
         where: {

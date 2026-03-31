@@ -5,10 +5,11 @@ import { Suspense } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+
 import { useTRPC } from "@/trpc/client";
+
 import { ReviewSidebar } from "../components/review-sidebar";
 import { ReviewFormSkeleton } from "../components/review-form";
-import type { SerializedEditorState } from "lexical";
 
 interface Props {
   productId: string;
@@ -46,7 +47,7 @@ export const ProductView = ({ productId }: Props) => {
 
           <div className="lg:col-span-5">
             {data.content ? 
-              <RichText data={data.content as unknown as SerializedEditorState} />
+              <RichText data={data.content} />
             : (
               <p className="font-medium italic text-muted-foreground">
                 No special content

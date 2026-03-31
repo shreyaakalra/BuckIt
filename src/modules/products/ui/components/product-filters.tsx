@@ -5,9 +5,9 @@ import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+import { TagsFilter } from "./tags-filter";
 import { PriceFilter } from "./price-filter";
 import { useProductFilters } from "../../hooks/use-product-filters";
-import { TagsFilter } from "./tags-filter";
 
 interface ProductFilterProps {
   title: string;
